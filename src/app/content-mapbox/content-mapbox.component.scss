@@ -1,0 +1,28 @@
+:host {
+    flex: 1 1 auto;
+    display: flex;
+
+    mgl-map {
+        flex: 1 1 auto;
+    }
+}
+
+.interaction-obfuscator {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    background: rgba(255, 255, 255, 0.7);
+    pointer-events: all;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .hint {
+        font-size: 40pt;
+        margin: 40px;
+        text-align: center;
+        user-select: none;
+        pointer-events: none;
+    }
+}

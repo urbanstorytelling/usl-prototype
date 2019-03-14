@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Mein Hamburg</title>
+  <base href="/">
+  
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="assets/img/webapp/launcher-icon-4x.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+  <!-- Hammer JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.js"></script>
+
+  <!-- Hammer JS Touch Emulator: Uncomment if for desktop -->
+  <!-- <script src="https://cdn.rawgit.com/hammerjs/touchemulator/master/touch-emulator.js"></script> -->
+  <script>
+    // TouchEmulator();
+  </script>
+
+  <!-- Start Materialize -->
+    <!-- <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script> -->
+    <!-- Compiled and minified CSS -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css"> -->
+  <!-- End Materialize -->
+
+  <script>
+    // https://houssein.me/progressive-angular-applications
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js').then(function (reg) {
+        console.log('Successfully registered service worker', reg);
+      }).catch(function (err) {
+        console.warn('Error whilst registering service worker', err);
+      });
+    }
+  </script>
+
+  
+</head>
+<body>
+  <app-root></app-root>
+</body>
+</html>

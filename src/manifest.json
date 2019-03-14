@@ -1,0 +1,24 @@
+{
+    "short_name": "USL-Platform",
+    "name": "USL-Platform",
+    "icons": [
+        {
+            "src": "assets/img/webapp/launcher-icon-1x.png",
+            "type": "image/png",
+            "sizes": "48x48"
+        },
+        {
+            "src": "assets/img/webapp/launcher-icon-2x.png",
+            "type": "image/png",
+            "sizes": "96x96"
+        },
+        {
+            "src": "assets/img/webapp/launcher-icon-4x.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        }
+    ],
+    "start_url": "/",
+    "background_color": "#2196F3",
+    "display": "standalone"
+}

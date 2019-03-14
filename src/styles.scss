@@ -1,0 +1,22 @@
+/* You can add global styles to this file, and also import other style files */
+
+html {
+    line-height: 1.5;
+    font-family: "Roboto", sans-serif;
+    font-weight: normal;
+    color: rgba(0,0,0,0.87);
+    user-select: none;
+
+    @media only screen and (min-width: 0) {
+        font-size: 14px;
+    }
+}
+
+body {
+    margin: 0;
+}
+
+*, *:before, *:after {
+    -webkit-box-sizing: inherit;
+    box-sizing: inherit;
+}

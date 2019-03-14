@@ -1,0 +1,57 @@
+<!-- <div class="map-wrapper"> -->
+  <ng-container *ngIf="displayOverlay">
+    <div class="interaction-obfuscator" *ngIf="!preventInteraction">
+      <div class="hint">Doppelklicken um Karte zu aktivieren <br>oder ALT drücken</div>
+    </div>
+  </ng-container>
+  <mgl-map #map
+    [style]="mapStyle"
+    [zoom]="_zoom"
+    [center]="_center"
+    [trackResize]="trackResize"
+    (load)=onMapLoad()>
+    <mgl-control mglNavigation></mgl-control>
+    <mgl-control mglGeolocate trackUserLocation="true"></mgl-control>
+    <mgl-control mglScale unit="metric" position="top-right"></mgl-control>
+    <!-- <mgl-marker *ngFor="let feature of projectIdeasGeometries.features" [lngLat]=feature.geometry.coordinates>
+          <div (click)="markerClick(feature)" class="marker" [ngStyle]="{
+                  'background-color': 'red',
+                  width: '20px',
+                  height: '20px'
+                }">
+          </div>
+        </mgl-marker> -->
+
+    <mgl-geojson-source id="symbols-source">
+      <mgl-feature *ngFor="let idea of projectIdeas" [geometry]="idea.data.geoJson.geometry" [properties]="idea"></mgl-feature>
+    </mgl-geojson-source>
+
+
+    <mgl-layer
+      id="symbols"
+      type="symbol"
+      source="symbols-source"
+      [layout]="{ 'icon-image': 'marker-15' }"
+      (click)="featureClick($event)"
+      (mouseEnter)="changeCursorToPointer()"
+      (mouseLeave)="changeCursorToDefault()"
+    ></mgl-layer>
+
+
+    <mgl-popup #popup [closeOnClick]="false" (close)="selectedFeatureProperties = null; selectedFeaturePoly = null;" *ngIf="selectedFeatureProperties"
+      [lngLat]="selectedFeatureProperties.data.geoJson.geometry.coordinates">
+      <div class="popup-wrapper">
+        <div class="popup-header">
+          <div class="popup-title">
+            {{selectedFeatureProperties.data.title}}
+          </div>
+        </div>
+        <div class="popup-body">
+          <div class="popup-desc">
+            {{selectedFeatureProperties.data.desc_short}}
+          </div>
+        </div>
+      </div>
+
+    </mgl-popup>
+  </mgl-map>

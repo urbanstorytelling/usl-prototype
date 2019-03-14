@@ -1,0 +1,49 @@
+<div class="page">
+    <div class="nav">
+        <button class="back" (click)="backBtnClicked()">
+            <i class="material-icons">arrow_back</i>
+        </button>
+        <div class="url">
+            {{_externalUrl}}
+        </div>
+    </div>
+    <div class="content">
+        <iframe *ngIf="_externalUrl" [src]="_externalUrl | safeUrl"
+        ></iframe>
+        <ng-container *ngIf="isDummyCta1">
+            <h4>Jetzt Mitmachen!</h4>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+            dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
+            non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </ng-container>
+        <ng-container *ngIf="isDummyCta2">
+            <h4>Eigenen Beitrag direkt in die Redaktionen schicken!</h4>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+            <textarea rows="4" cols="50">Deine Nachricht</textarea>
+            <div class="camera" *ngIf="!photoSrc">
+                <button *ngIf="!streaming" (click)="startVideoStream()">Camera starten</button>
+                <button *ngIf="streaming" (click)="takePicture()">Bild aufnehmen</button>
+                <video [hidden]="!cameraStream" #video>Video stream not available.</video>
+            </div>
+            <canvas #canvas [style.display]="'none'">
+            </canvas>
+            <div class="photooutput" *ngIf="photoSrc">
+                <div class="pic">
+                    <img [src]="photoSrc">
+                    <button (click)="clearPhoto()">Bild entfernen</button>
+                </div>
+            </div>
+            <button class="abschicken" (click)="senden()">Abschicken!</button>
+            <div class="thankyou" [class.visible]="sendThankYou">
+                <h4>Abgeschickt!</h4>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                </p>
+                <button (click)="backBtnClicked()">zurück zum Stream</button>
+            </div>
+        </ng-container>
+    </div>
+</div>

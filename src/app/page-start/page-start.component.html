@@ -1,0 +1,133 @@
+<div class="app" [class.active]="externalUrl == null" [style.transform]="'translateX(-' + extTransX + 'px)'" [class.noTransition]="noTransition">
+    <header>
+        <div class="toolbar">
+            <div class="powered">
+                powered by
+            </div>
+            <div class="logo"></div>
+            <div class="nav">
+                <i class="material-icons">more_vert</i>
+            </div>
+            <!-- <div class="search">Suche</div> -->
+        </div>
+    </header>
+    <div class="wait" *ngIf="notificationVisible">
+        <div class="wait-text">
+            {{notificationText}}
+        </div>
+        <div class="waiting-anim"></div>
+    </div>
+    <div class="ios-notification" *ngIf="isIOs">
+        <div class="text">
+            It appears you are on an iOS device...
+            <br> If you want to use this page as an app, press this beauty (on Safari):
+            <img src="./../../assets/img/ios-share.png"> and select "add to home-screen".
+        </div>
+        <div class="button" (click)="iosNotificationClicked()">got it, thanks.</div>
+    </div>
+    <main appScrollwatch (scrollTop)="mainScrollTop = $event" (isTop)="mainIsTop = $event" (isBottom)="mainIsBottom = $event">
+        <div class="map" [style.transform]="'translateY(' + (mainScrollTop - (mainScrollTop * .3)) + 'px)'">
+            <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [disableDefaultUI]="true" [zoomControl]="true" (mapReady)="storeMapReady($event)"
+                [usePanning]="true">
+                <agm-marker *ngIf="showUserPos" [latitude]="lat" [longitude]="lng" [markerClickable]="false" [iconUrl]="myPosIconFix">
+                </agm-marker>
+                <agm-circle *ngIf="showUserPos" [latitude]="lat" [longitude]="lng" [clickable]="false" [fillColor]="'Aquamarine'" [radius]="queryRadius"
+                    [strokeWeight]="2" [strokeColor]="'LightSlateGray'" [strokeOpacity]="1" [strokePosition]="0">
+                </agm-circle>
+                <agm-marker-cluster [imagePath]="'./../../assets/markerClusterer/m'" [maxZoom]="20">
+                    <agm-marker *ngFor="let news of data; let i = index" [latitude]="news.latLng.lat" [longitude]="news.latLng.lng" [iconUrl]="'./../../assets/img/ic_chat_black_24dp_1x.png'">
+                        <agm-snazzy-info-window [maxWidth]="300" [maxHeight]="200" [closeWhenOthersOpen]="true">
+                            <ng-template>
+                                <div class="marker-content" (click)="clickedMarkerContent(news, i)">
+                                    <div class="title">
+                                        {{news.title}}
+                                    </div>
+                                    <div class="source">
+                                        {{news.source}}
+                                    </div>
+                                    <div class="action">
+                                        zum Artikel
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </agm-snazzy-info-window>
+                    </agm-marker>
+                </agm-marker-cluster>
+            </agm-map>
+        </div>
+
+
+        <div class="content">
+            <div class="content-bar" [class.shadow]="mainIsBottom">
+                <div class="bar-icon query-radius">
+                    <div class="headline">query radius</div>
+                    <i class="material-icons">track_changes</i>
+                    {{queryRadius}}
+                </div>
+                <div class="bar-icon 1" (click)="data = normalData; activeView = 'normalData'">
+                    <i class="material-icons" [class.active]="activeView == 'normalData'">sort</i>
+                </div>
+                <div class="bar-icon 2" (click)="data = archivedData; activeView = 'archivedData'">
+                    <i class="material-icons" [class.active]="activeView == 'archivedData'">inbox</i>
+                </div>
+            </div>
+
+            <div class="cards content-footer" [class.noScroll]="!mainIsBottom">
+                <!-- <div class="card" *ngFor="let news of newsList | async">{{news}}</div> -->
+                <div appNewsCard class="card" *ngFor="let news of data" [id]="news.id" (click)="cardClicked(news)" (panStart)="onPanStartCard($event)"
+                    (pan)="onPanCard($event)" (panEnd)="onPanEndCard($event)">
+                    <div class="top">
+                        <div class="label">{{news.label}}</div>
+                    </div>
+                    <div class="news-content" [class.reverse]="news.reverse">
+                        <div class="img" *ngIf="news.imgUrl">
+                            <app-img-spinner [src]="news.imgUrl" [alt]="''"></app-img-spinner>
+                        </div>
+                        <div class="right">
+                            <div class="title">
+                                {{news.title}}
+                            </div>
+                            <div class="source">
+                                {{news.source}}
+                            </div>
+                            <div class="text">
+                                {{news.content}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bottom">
+                        <hr>
+                        <div class="dist" *ngIf="news.dist">
+                            Entfernung {{news.dist}} m
+                        </div>
+                        <div class="link">
+                            {{news.linkCta}}
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="card" *ngIf="loaded">
+                    <div class="top">
+                        <div class="label">Featured Stories</div>
+                    </div>
+                    <div class="news-content extra">
+                        <div class="title extra">
+                            Was sonst noch in HH?
+                        </div>
+                        <div class="img extra" *ngFor="let news of dataDummyNonLocal" (click)="cardClicked(news)">
+                            <app-img-spinner [src]="news.imgUrl" [alt]="''"></app-img-spinner>
+                        </div>
+                    </div>
+                    <div class="bottom">
+                    </div>
+                </div>
+                <div class="extraurbanlink" (click)="cardClicked({url: 'https://www.urbanstories.info/'})">https://www.urbanstories.info/</div>
+            </div>
+        </div>
+    </main>
+</div>
+<div class="external" (pan)="onPanExternal($event)" [style.transform]="'translateX(' + (innerWidth - extTransX) + 'px)'"
+    (panStart)="noTransition = true" (panEnd)="noTransition = false; onPanExternalEnd()" [class.noTransition]="noTransition">
+    <app-external-content *ngIf="externalUrl" [externalUrl]="externalUrl" (back)="closeExternal()">
+    </app-external-content>
+</div>
